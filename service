@@ -1,0 +1,57 @@
+package com.example.service;
+
+import com.example.entity.Employee;
+import com.example.repository.EmployeeRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+    // CREATE
+    public Employee createEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    // READ ALL
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+    // READ BY ID
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
+    }
+
+    // UPDATE
+    public Employee updateEmployee(Long id, Employee employee) {
+
+        Optional<Employee> result = employeeRepository.findById(id);
+
+        if (result.isPresent()) {
+
+            Employee existing = result.get();
+
+            existing.setName(employee.getName());
+            existing.setEmail(employee.getEmail());
+            existing.setDepartment(employee.getDepartment());
+
+            return employeeRepository.save(existing);
+        }
+
+        return null;
+    }
+
+    // DELETE
+    public void deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
+    }
+}
